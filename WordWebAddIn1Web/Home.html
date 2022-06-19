@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Word Processor</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <!-- Load the Fabric CSS files from the CDN which style the various Fabric components. -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/5.0.1/css/fabric.min.css">
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.2.0/css/fabric.components.min.css">
+    <!--<script src="Scripts/MessageBanner.js" type="text/javascript"></script>-->
+    <!--<script src="Scripts/dropdown.js" type="text/javascript"></script>-->
+    <link href="Content/settings.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="Content/tab.bar.css" type="text/css" />
+    <script src="Controls/ListItem/Jquery.ListItem.js"></script>
+
+
+</head>
+
+<body class="ms-font-m ms-settings">
+    <!--<div id="header" class=" ms-tab-bar__header--centeritemstext">
+        <div class="ms-Grid">
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col ms-u-sm4 ms-u-md4 ms-u-lg4"><img src="/Images/P5N_logo.png" width="50" alt="Logo"></div>
+                <div class="ms-Grid-col ms-u-sm8 ms-u-md8 ms-u-lg8"> <div class="ms-font-xl" style="line-height:2em">Word Processor</div></div>
+            </div>
+        </div>
+    </div>-->
+
+    <nav class="ms-tab-bar__header ms-bgColor-themeLighter">
+        <div class="ms-tab-bar__header--center ms-font-m ms-fontWeight-light ms-fontColor-themePrimary">
+            <div class="ms-tab-bar__header--center"></div>
+            <span id="HighlightTab" class="HighlightTab">
+                <button class="ms-tab-bar__header--centeritems ms-font-mi ms-fontWeight-light ms-fontColor-themePrimary">
+                    <i class="ms-font-xl ms-Icon ms-Icon--EditNote ms-fontColor-themePrimary"></i>
+                    <div class="ms-tab-bar__header--centeritemstext">
+                        Highlight
+                    </div>
+                </button>
+            </span>
+            <span id="FindReplaceTab" class="FindReplaceTab">
+                <button class="ms-tab-bar__header--centeritems ms-font-mi ms-fontWeight-light ms-fontColor-themePrimary">
+                    <i class="ms-font-xl ms-Icon ms-Icon ms-Icon--Search ms-fontColor-themePrimary"></i>
+                    <div class="ms-tab-bar__header--centeritemstext">
+                        Find and Replace
+                    </div>
+                </button>
+            </span>
+            <span id="WordOveruseTab" class="WordOveruseTab">
+                <button class="ms-tab-bar__header--centeritems ms-font-mi ms-fontWeight-light ms-fontColor-themePrimary">
+                    <i class="ms-font-xl ms-Icon ms-Icon--Font ms-fontColor-themePrimary"></i>
+                    <div class="ms-tab-bar__header--centeritemstext">
+                        Word Overuse
+                    </div>
+                </button>
+            </span>
+            <div class="ms-tab-bar__header--center"></div>
+
+        </div>
+    </nav>
+
+    <main class="ms-settings__main">
+
+        <section class="ms-settings__content ms-font-m ms-fontColor-neutralPrimary">
+            <div class="ms-firstrun-pages__content">
+                <div class="HighlightSettings">
+                    <div class="ms-font-xxl ms-settings__content__title">Highlight Sentences</div>
+                    <div class="ms-font-xl ms-settings__content__subtitle">Select Condition and Highlight</div>
+                    <!--<div class="ms-TextField">
+            <label class="ms-Label">Product name (optional)</label>
+            <input id="product-name" class="ms-TextField-field" type="text" placeholder="Select a condition.">
+        </div>-->
+                    <div class="ms-CheckBox column-selector">
+                        <input tabindex="-1" type="checkbox" class="ms-CheckBox-input" id="longSentence" checked="checked" />
+                        <label role="checkbox"
+                               class="ms-CheckBox-field "
+                               tabindex="0"
+                               name="longSentence">
+                            <span class="ms-Label">Sentences with more than 30 words</span>
+                        </label>
+                    </div>
+                    <div class="ms-CheckBox column-selector">
+                        <input id="complicatedSentence" tabindex="-1" type="checkbox" class="ms-CheckBox-input" />
+                        <label role="checkbox"
+                               class="ms-CheckBox-field "
+                               tabindex="0"
+                               aria-checked="false"
+                               name="complicatedSentence">
+                            <span class="ms-Label">Sentences with more than 3 commas</span>
+                        </label>
+                    </div>
+                    <div class="ms-CheckBox column-selector">
+                        <input tabindex="-1" type="checkbox" class="ms-CheckBox-input" id="shortSentence">
+                        <label role="checkbox"
+                               class="ms-CheckBox-field "
+                               tabindex="0"
+                               name="shortSentence">
+                            <span class="ms-Label">2 consecutive sentences with less than 15 words</span>
+                        </label>
+                    </div>
+                    <div class="ms-CheckBox column-selector">
+                        <input tabindex="-1" type="checkbox" class="ms-CheckBox-input" id="bracketSentences">
+                        <label role="checkbox"
+                               class="ms-CheckBox-field "
+                               tabindex="0"
+                               name="bracketSentences">
+                            <span class="ms-Label">More than 20 words between brackets</span>
+                        </label>
+                    </div>
+                    <br />
+                    <br />
+
+                    <button class="ms-Button ms-Button--primary ms-tab-bar__header--center" id="highlight-button">
+                        <span class="ms-Button-label" id="hightlightbutton-text">Highlight</span>
+                        <span class="ms-Button-description" id="hightlightbutton-desc"></span>
+                    </button>
+                    <br />
+                    <br />
+
+                    <button class="ms-Button ms-Button--primary ms-tab-bar__header--center" id="clear-button">
+                        <span class="ms-Button-label" id="clearbutton-text">Clear</span>
+                        <span class="ms-Button-description" id="clearbutton-desc"></span>
+                    </button>
+
+                    <div class="DataMessage ms-Label" id="txtNoDataFound"></div>
+                </div>
+
+
+                <div class="FindReplaceSettings undisplayed">
+                    <div class="ms-font-xl ms-settings__content__title">Find and Replace</div>
+                    <div class="ms-font-l ms-settings__content__subtitle">Find content using regex and replace with other regex</div>
+                    <ul class="ms-List" id="ms-List-Regex">
+                        <!--<li class="ms-ListItem is-selectable is-selected">
+                <span id="primaryText" class="ms-ListItem-primaryText">Add non breaking spaces after</span>
+                <span id="secondaryText" class="ms-ListItem-secondaryText">(§)([0-9]) + …o</span>
+                <span id="tertiaryText" class="ms-ListItem-tertiaryText">§^s\\2</span>
+                <div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+                <div class="ms-ListItem-actions">
+                    <div class="ms-ListItem-action">
+                        <i id="SearchAndReplace" class="ms-font-xxl ms-fontWeight-light ms-fontColor-themePrimary ms-Icon ms-Icon--Play"></i>
+                    </div>
+                </div>
+            </li>-->
+
+                    </ul>
+
+                </div>
+                <div class="WordOveruseSettings undisplayed">
+                    <div class="ms-font-xl ms-settings__content__title">Word Overuse</div>
+                    <div class="ms-font-l ms-settings__content__subtitle">List of Over used words, click on it to highlight in document. </div>
+                    <ul class="ms-List" id="ms-List-Overuse">
+                    </ul>
+                </div>
+                
+            </div>
+
+        </section>
+        <div class="ms-MessageBanner" style="position:absolute;bottom: 0;" hidden="hidden">
+            <div class="ms-MessageBanner-content">
+                <div class="ms-MessageBanner-text">
+                    <div class="ms-MessageBanner-clipper">
+                        <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
+                        <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
+                    </div>
+                </div>
+                <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+                <div class="ms-MessageBanner-action"></div>
+            </div>
+            <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+        </div>
+    </main>
+    <!-- Component used for displaying notifications -->
+    <footer class="ms-settings__footer ms-bgColor-themePrimary">
+        <div class="ms-settings__footer--left">
+            <h1 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-white">Point5nyble</h1>
+        </div>
+    </footer>
+
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.1.min.js"></script>
+
+    <!-- fabric.min.js contains JavaScript methods you can use to control the Fabric components. -->
+    <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.2.0/js/fabric.min.js"></script>
+
+    <script src="Scripts/Helpers.js" type="text/javascript"></script>
+    <script src="Home.js" type="text/javascript"></script>
+    <script src="Controls/ListItem/Jquery.ListItem.js"></script>
+</body>
+</html>
+
+

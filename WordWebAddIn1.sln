@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32519.111
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordWebAddIn1", "WordWebAddIn1\WordWebAddIn1.csproj", "{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordWebAddIn1Web", "WordWebAddIn1Web\WordWebAddIn1Web.csproj", "{AB009D9C-8698-431C-8146-CC4F7EDE79AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB16CC70-AE12-43C9-8D6C-3057F5C5CBE1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AB009D9C-8698-431C-8146-CC4F7EDE79AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB009D9C-8698-431C-8146-CC4F7EDE79AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB009D9C-8698-431C-8146-CC4F7EDE79AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB009D9C-8698-431C-8146-CC4F7EDE79AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF98CAA1-5829-44CC-AA64-2062DF36F0C4}
+	EndGlobalSection
+EndGlobal
