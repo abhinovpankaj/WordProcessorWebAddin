@@ -9,12 +9,7 @@
       "Description": "add non breaking spaces after: Art./ §/ Abs./ S. / Hs./ Nr./ Ziff./ lit. (if a space was missing)",
       "Find": "(§)([0-9]) + …",
       "Replace": "§^s\\2"
-    },
-    {
-      "Description": "add non breaking spaces after: Art./ § / Abs./ S. / Hs./ Nr./ Ziff./ lit.",
-      "Find": "(§ )([0-9]) + …",
-      "Replace": "§^s\\2"
-    },
+    },    
     {
       "Description": "add non breaking spaces before: % / € / $",
       "Find": "([0-9]) (%)+ …",

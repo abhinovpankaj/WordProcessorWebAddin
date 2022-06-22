@@ -65,13 +65,13 @@
 
         <section class="ms-settings__content ms-font-m ms-fontColor-neutralPrimary">
             <div class="ms-firstrun-pages__content">
-                <div class="HighlightSettings">
+                <div class="HighlightSettings undisplayed">
                     <div class="ms-font-xxl ms-settings__content__title">Highlight Sentences</div>
                     <div class="ms-font-xl ms-settings__content__subtitle">Select Condition and Highlight</div>
                     <!--<div class="ms-TextField">
-            <label class="ms-Label">Product name (optional)</label>
-            <input id="product-name" class="ms-TextField-field" type="text" placeholder="Select a condition.">
-        </div>-->
+                    <label class="ms-Label">Product name (optional)</label>
+                    <input id="product-name" class="ms-TextField-field" type="text" placeholder="Select a condition.">
+                </div>-->
                     <div class="ms-CheckBox column-selector">
                         <input tabindex="-1" type="checkbox" class="ms-CheckBox-input" id="longSentence" checked="checked" />
                         <label role="checkbox"
@@ -128,21 +128,21 @@
                 </div>
 
 
-                <div class="FindReplaceSettings undisplayed">
+                <div class="FindReplaceSettings">
                     <div class="ms-font-xl ms-settings__content__title">Find and Replace</div>
                     <div class="ms-font-l ms-settings__content__subtitle">Find content using regex and replace with other regex</div>
                     <ul class="ms-List" id="ms-List-Regex">
-                        <!--<li class="ms-ListItem is-selectable is-selected">
-                <span id="primaryText" class="ms-ListItem-primaryText">Add non breaking spaces after</span>
-                <span id="secondaryText" class="ms-ListItem-secondaryText">(§)([0-9]) + …o</span>
-                <span id="tertiaryText" class="ms-ListItem-tertiaryText">§^s\\2</span>
-                <div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
-                <div class="ms-ListItem-actions">
-                    <div class="ms-ListItem-action">
-                        <i id="SearchAndReplace" class="ms-font-xxl ms-fontWeight-light ms-fontColor-themePrimary ms-Icon ms-Icon--Play"></i>
-                    </div>
-                </div>
-            </li>-->
+                        <li class="ms-ListItem is-selectable">
+                            <span id="primaryText" class="ms-ListItem-primaryText">Add non breaking spaces after</span>
+                            <span id="secondaryText" class="ms-ListItem-secondaryText">(§)([0-9]) + …o</span>
+                            <span id="tertiaryText" class="ms-ListItem-tertiaryText">§^s\\2</span>
+                            <div class="ms-ListItem-selectionTarget js-toggleSelection"></div>
+                            <div class="ms-ListItem-actions">
+                                <div class="ms-ListItem-action">
+                                    <i id="SearchAndReplace" class="ms-font-xxl ms-fontWeight-light ms-fontColor-themePrimary ms-Icon ms-Icon--Play"></i>
+                                </div>
+                            </div>
+                        </li>
 
                     </ul>
 
@@ -153,10 +153,11 @@
                     <ul class="ms-List" id="ms-List-Overuse">
                     </ul>
                 </div>
-                
+
             </div>
 
         </section>
+        <!-- Component used for displaying notifications -->
         <div class="ms-MessageBanner" style="position:absolute;bottom: 0;" hidden="hidden">
             <div class="ms-MessageBanner-content">
                 <div class="ms-MessageBanner-text">
@@ -171,7 +172,7 @@
             <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
         </div>
     </main>
-    <!-- Component used for displaying notifications -->
+    
     <footer class="ms-settings__footer ms-bgColor-themePrimary">
         <div class="ms-settings__footer--left">
             <h1 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-white">Point5nyble</h1>
@@ -183,10 +184,10 @@
 
     <!-- fabric.min.js contains JavaScript methods you can use to control the Fabric components. -->
     <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.2.0/js/fabric.min.js"></script>
-
+    <script src="Controls/ListItem/Jquery.ListItem.js"></script>
     <script src="Scripts/Helpers.js" type="text/javascript"></script>
     <script src="Home.js" type="text/javascript"></script>
-    <script src="Controls/ListItem/Jquery.ListItem.js"></script>
+
 </body>
 </html>
 

@@ -22,8 +22,9 @@
                 return new fabric['MessageBanner'](this);
             });
             WordProcessorApp.messageBanner.hide();
-            
+
             $('.ms-ListItem').ListItem();
+            
 
             $('#hightlightbutton-text').text("Highlight");
             $('#highlightbutton-desc').text("Click the button to highlights the matched sentences in the document.");
@@ -34,12 +35,7 @@
 
             $('.column-selector').children('input[type="checkbox"]').change(WordProcessorApp.setHighlightFilters);
 
-            $('.ms-ListItem').children('.ms-ListItem-selectionTarget').click(
-                {
-                    //find: $(this).siblings('.ms-ListItem-primaryText').first().innerText,
-                    //replace: $(this).siblings('.ms-ListItem-secondaryText').first().innerText,
-                    isSelected: $(this).children('.ms-ListItem-selectionTarget').first().hasClass('js-toggleSelection')
-                }, WordProcessorApp.SetResetCurrentPattern);
+            
             //// If not using Word 2016, use fallback logic.
             ////if (!Office.context.requirements.isSetSupported('WordApi', '1.1')) {
             ////    $("#template-description").text("This sample displays the selected text.");
@@ -54,6 +50,13 @@
             loadSampleData();
 
             WordProcessorApp.populateRegexList();
+            $('.ms-ListItem').children('.ms-ListItem-selectionTarget').click(
+                {
+                    //find: $(this).siblings('.ms-ListItem-primaryText').first().innerText,
+                    //replace: $(this).siblings('.ms-ListItem-secondaryText').first().innerText,
+                    isSelected: $(this).children('.ms-ListItem-selectionTarget').first().hasClass('js-toggleSelection')
+                }, WordProcessorApp.SetResetCurrentPattern);
+
             WordProcessorApp.populateWordOveruse();
 
             WordProcessorApp.CheckBoxElements = $(".column-selector").map(function () {
@@ -69,6 +72,8 @@
                     
                     from: $(this).attr('class')
             }, WordProcessorApp.SearchandReplace);
+
+            
         });
     };
 
@@ -357,7 +362,7 @@
                 //divElement3.appendChild(divElement);
                 
                 var divElement2 = document.createElement('div');
-                divElement2.classList.add("ms-listitem-selectiontarget","js-toggleSelection");
+                divElement2.classList.add("ms-listitem-selectiontarget");//js-toggleSelection
 
                 var spanPrimary = document.createElement('span');
                 spanPrimary.className = 'ms-ListItem-primaryText';
@@ -402,8 +407,8 @@
     function showNotification(header, content) {
         $("#notification-header").text(header);
         $("#notification-body").text(content);
-        messageBanner.showBanner();
-        messageBanner.toggleExpansion();
+        //WordProcessorApp.messageBanner.
+        WordProcessorApp.messageBanner.toggleExpansion();
     }
 
     window.WordProcessorApp = WordProcessorApp;

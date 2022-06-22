@@ -44,9 +44,31 @@
         
         console.log(WordProcessorApp.CurrentSelectedPattern.find);          
     }
-    WordProcessorApp.SearchandReplace = function (event) {
-        console.log("Inside Search and replace");
-        console.log(WordProcessorApp.CurrentSelectedPattern.replace);
+    WordProcessorApp.SearchandReplace = async function (event) {
+        await Word.run(async (context) => {
+            console.log("Inside Search and replace");
+            console.log("Find:" + WordProcessorApp.CurrentSelectedPattern.find);
+            console.log("Replace:" + WordProcessorApp.CurrentSelectedPattern.replace);
+            var findPattern = WordProcessorApp.CurrentSelectedPattern.find;
+            var replacePattern =  WordProcessorApp.CurrentSelectedPattern.replace;
+
+            let re = new RegExp(findPattern.replace(replacePattern), 'g');
+
+            let sentences = context.document
+                .getSelection()
+                .getTextRanges(["."] /* Using the "." as delimiter */, false /*means without trimming spaces*/);
+            sentences.load("text");
+
+            await context.sync();
+
+            for (let i = 0; i < sentences.items.length; i++) {
+                let found = sentences.items[i].text.match(findPattern);
+                if (found) {
+                    sentences.items[i].text.replace(re, c => '_'.repeat(c.length));
+                }
+            }
+        });
+        
     }
     // Navigates to a different DIV when users click on the tab bar.
     WordProcessorApp.newPage = function () {
@@ -109,7 +131,9 @@
                 li.appendChild(spanTertiary);
                 li.appendChild(divElement2);
                 li.appendChild(divElement3);
-
+                divElement2.on('click', '.js-toggleSelection', function (event) {
+                    $(this).parents('.ms-ListItem').toggleClass('is-selected');
+                });
                 ul[0].appendChild(li);
 
             });
