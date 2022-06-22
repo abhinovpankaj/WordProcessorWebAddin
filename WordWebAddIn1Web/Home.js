@@ -47,8 +47,6 @@
             ////}
 
             
-            loadSampleData();
-
             WordProcessorApp.populateRegexList();
             $('.ms-ListItem').children('.ms-ListItem-selectionTarget').click(
                 {
@@ -152,66 +150,69 @@
 
             let found = false;
             // Gets the complete sentence (as range) associated with the insertion point.
-            let sentences = context.document
-                .getSelection()
-                .getTextRanges(["."] /* Using the "." as delimiter */, false /*means without trimming spaces*/);
-            sentences.load("text");
-           
+            let paragraphs = context.document.body.paragraphs;
+            paragraphs.load("$none"); // No properties needed.
+
             await context.sync();
-            
-            let previousCount = await GetWordCount(sentences.items[0].text);
-            let k = 0;
-            for (let i = 0; i < sentences.items.length; i++) {
-                
-                //check if the sentence has more than 30 words
-                if (WordProcessorApp.checkedItems.indexOf("longSentence") !== -1) {
-                    var isOverLimit = await IsWordCountInSentenceOverLimit(sentences.items[i].text);
-                    if (isOverLimit) {
-                        sentences.items[i].font.highlightColor = '#FFFF00'; // Yellow
-                        found = true;
-                    }
-                }
-                
-                //Check if sentences has multiple commas
-                if (WordProcessorApp.checkedItems.indexOf("complicatedSentence")!==-1) {
-                    if (HasSentenceMultipleCommas(sentences.items[i].text)) {
-                        sentences.items[i].font.highlightColor = '#FFFFE0';
-                        found = true;// Light Yellow
-                    }
-                }
-                //Check if  consecutive sentences are too short.
-                if (WordProcessorApp.checkedItems.indexOf("shortSentence") !== -1 && sentences.items.length>1) {
-                    if (i < sentences.items.length)
-                        k = i + 1;
-                    let wordCount = await GetWordCount(sentences.items[k].text);
-                    if (wordCount < WordLimitShortSentence && previousCount < WordLimitShortSentence) {
-                        if (k == 1) {
-                            sentences.items[0].font.highlightColor = '#DD9F00';
-                            found = true;//Golden
-                            //console.log(sentences.items[0].text);
-                        }
-                        sentences.items[k - 1].font.highlightColor = '#DD9F00'; //Golden
-                        sentences.items[k].font.highlightColor = '#DD9F00';
-                        found = true;
-                        //console.log(sentences.items[i].text);
-                    }
-                    previousCount = wordCount;
-                }
-                //check if sentences have words in brackets over limit.
-                if (WordProcessorApp.checkedItems.indexOf("bracketSentences")!==-1) {
-                    let found = sentences.items[i].text.match(BracketMatchingPattern);
-                    if (found) {
-                        var aboveLimit = found.filter(IsAboveWordLimitThreashold);
-                        if (aboveLimit.length > 0) {
+
+            for (var p = 0; p < paragraphs.items.length; p++) {
+                let sentences = paragraphs.items[p]
+                    .getTextRanges(["."] /* Using the "." as delimiter */, false /*means without trimming spaces*/);
+                sentences.load("text");
+                await context.sync();
+                let previousCount = await GetWordCount(sentences.items[0].text);
+                let k = 0;
+                for (let i = 0; i < sentences.items.length; i++) {
+
+                    //check if the sentence has more than 30 words
+                    if (WordProcessorApp.checkedItems.indexOf("longSentence") !== -1) {
+                        var isOverLimit = await IsWordCountInSentenceOverLimit(sentences.items[i].text);
+                        if (isOverLimit) {
+                            sentences.items[i].font.highlightColor = '#FFFF00'; // Yellow
                             found = true;
-                            sentences.items[k].font.highlightColor = '#DD9F30';
                         }
+                    }
 
+                    //Check if sentences has multiple commas
+                    if (WordProcessorApp.checkedItems.indexOf("complicatedSentence") !== -1) {
+                        if (await HasSentenceMultipleCommas(sentences.items[i].text)) {
+                            sentences.items[i].font.highlightColor = '#FFFFE0';
+                            found = true;// Light Yellow
+                        }
+                    }
+                    //Check if  consecutive sentences are too short.
+                    if (WordProcessorApp.checkedItems.indexOf("shortSentence") !== -1 && sentences.items.length > 1) {
+                        if (i < sentences.items.length)
+                            k = i + 1;
+                        let wordCount = await GetWordCount(sentences.items[k].text);
+                        if (wordCount < WordLimitShortSentence && previousCount < WordLimitShortSentence) {
+                            if (k == 1) {
+                                sentences.items[0].font.highlightColor = '#DD9F00';
+                                found = true;//Golden
+                                //console.log(sentences.items[0].text);
+                            }
+                            sentences.items[k - 1].font.highlightColor = '#DD9F00'; //Golden
+                            sentences.items[k].font.highlightColor = '#DD9F00';
+                            found = true;
+                            //console.log(sentences.items[i].text);
+                        }
+                        previousCount = wordCount;
+                    }
+                    //check if sentences have words in brackets over limit.
+                    if (WordProcessorApp.checkedItems.indexOf("bracketSentences") !== -1) {
+                        let found = sentences.items[i].text.match(BracketMatchingPattern);
+                        if (found) {
+                            var aboveLimit = found.filter(IsAboveWordLimitThreashold);
+                            if (aboveLimit.length > 0) {
+                                found = true;
+                                sentences.items[k].font.highlightColor = '#DD9F30';
+                            }
+
+                        }
                     }
                 }
-
             }
-
+           
             if (!found) {
                 showNotification("Highlight", "No match found, nothing to highlight.");
             }

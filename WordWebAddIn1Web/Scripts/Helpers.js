@@ -131,9 +131,9 @@
                 li.appendChild(spanTertiary);
                 li.appendChild(divElement2);
                 li.appendChild(divElement3);
-                divElement2.on('click', '.js-toggleSelection', function (event) {
+                divElement2.onClick= function (event) {
                     $(this).parents('.ms-ListItem').toggleClass('is-selected');
-                });
+                };
                 ul[0].appendChild(li);
 
             });
@@ -145,12 +145,14 @@
         // Get ID of column checkbox that was changed.
         var columnName = event.target.id;
         if (WordProcessorApp.checkedItems.length > 0) {
-            if (WordProcessorApp.checkedItems.indexOf(columnName) !== -1) {
+            if (WordProcessorApp.checkedItems.indexOf(columnName) == -1) {
                 WordProcessorApp.checkedItems.push(columnName);
             }
             else {
                 WordProcessorApp.checkedItems.pop(columnName);
             }
+        } else {
+            WordProcessorApp.checkedItems.push(columnName);
         }
         
         
