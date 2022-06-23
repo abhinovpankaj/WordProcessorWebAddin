@@ -9,7 +9,7 @@
     
     var WordProcessorApp = window.WordProcessorApp || {};
 
-
+    var HighlightedSentences = [];
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -64,7 +64,7 @@
 
             // Add a click event handler for the highlight button.
             $('#highlight-button').click(HighlightSentences); 
-            $('#clear-button').click(loadSampleData);
+            $('#clear-button').click(ClearHighlights);
 
             $('.ms-ListItem-action').click({
                     
@@ -74,7 +74,34 @@
             
         });
     };
+    async function ClearHighlights() {
+        await Word.run(async (context) => {
 
+            let paragraphs = context.document.body.paragraphs;
+            paragraphs.load("$none"); // No properties needed.
+
+            await context.sync();
+
+            for (var p = 0; p < paragraphs.items.length; p++) {
+                let sentences = paragraphs.items[p]
+                    .getTextRanges(["."] /* Using the "." as delimiter */, false /*means without trimming spaces*/);
+                sentences.load("text");
+                await context.sync();
+               
+                for (let i = 0; i < sentences.items.length; i++) {
+                    var foundSentence = HighlightedSentences.filter(function (item) {
+                        return (item.text == sentences.items[i].text);
+                    });
+                    if (foundSentence.length>0) {
+                        sentences.items[i].font.highlightColor = "#FFFFFF";
+                    }
+                    
+                }                
+            }
+            await context.sync();
+            
+            });
+    }
     function loadSampleData() {
         // Run a batch operation against the Word object model.
         Word.run(function (context) {
@@ -170,31 +197,38 @@
                         if (isOverLimit) {
                             sentences.items[i].font.highlightColor = '#FFFF00'; // Yellow
                             found = true;
+                            HighlightedSentences.push(sentences.items[i]);
                         }
                     }
 
                     //Check if sentences has multiple commas
                     if (WordProcessorApp.checkedItems.indexOf("complicatedSentence") !== -1) {
-                        if (await HasSentenceMultipleCommas(sentences.items[i].text)) {
+                        var hasMultiCommas = await HasSentenceMultipleCommas(sentences.items[i].text);
+                        if (hasMultiCommas) {
                             sentences.items[i].font.highlightColor = '#FFFFE0';
-                            found = true;// Light Yellow
+                            found = true;
+                            //add to the collection
+                            HighlightedSentences.push(sentences.items[i]);
                         }
                     }
                     //Check if  consecutive sentences are too short.
                     if (WordProcessorApp.checkedItems.indexOf("shortSentence") !== -1 && sentences.items.length > 1) {
-                        if (i < sentences.items.length)
+                        if (i < sentences.items.length-1)
                             k = i + 1;
                         let wordCount = await GetWordCount(sentences.items[k].text);
                         if (wordCount < WordLimitShortSentence && previousCount < WordLimitShortSentence) {
                             if (k == 1) {
                                 sentences.items[0].font.highlightColor = '#DD9F00';
+                                HighlightedSentences.push(sentences.items[0]);
                                 found = true;//Golden
                                 //console.log(sentences.items[0].text);
                             }
                             sentences.items[k - 1].font.highlightColor = '#DD9F00'; //Golden
                             sentences.items[k].font.highlightColor = '#DD9F00';
                             found = true;
-                            //console.log(sentences.items[i].text);
+                            HighlightedSentences.push(sentences.items[k]);
+                            HighlightedSentences.push(sentences.items[k-1]);
+
                         }
                         previousCount = wordCount;
                     }
@@ -206,6 +240,7 @@
                             if (aboveLimit.length > 0) {
                                 found = true;
                                 sentences.items[k].font.highlightColor = '#DD9F30';
+                                HighlightedSentences.push(sentences.items[k]);
                             }
 
                         }
