@@ -65,11 +65,11 @@
             // Add a click event handler for the highlight button.
             $('#highlight-button').click(HighlightSentences); 
             $('#clear-button').click(ClearHighlights);
-
-            $('.ms-ListItem-action').click({
+            $('#RefreshWordUsage').click(WordProcessorApp.populateWordOveruse);
+            //$('.ms-ListItem-action').click({
                     
-                    from: $(this).attr('class')
-            }, WordProcessorApp.SearchandReplace);
+            //        from: $(this).attr('class')
+            //}, WordProcessorApp.SearchandReplace);
 
             
         });
@@ -102,48 +102,43 @@
             
             });
     }
-    function loadSampleData() {
-        // Run a batch operation against the Word object model.
-        Word.run(function (context) {
-            // Create a proxy object for the document body.
-            var body = context.document.body;
+    
 
-            // Queue a commmand to clear the contents of the body.
-            body.clear();
-            // Queue a command to insert text into the end of the Word document body.
-            body.insertText(
-                "This is a sample text inserted in the document",
-                Word.InsertLocation.end);
+   async function hightlightSelectedWord(selectedWord, highlight) {
+       await Word.run(async (context) => {
+            let paragraphs = context.document.body.paragraphs;
+            paragraphs.load("$none"); // No properties needed.
 
-            // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
-            return context.sync();
-        })
-        .catch(errorHandler);
-    }
+            await context.sync();
 
-    function hightlightSelectedWord(selectedWord) {
-        Word.run(function (context) {
-            var range = context.document.getSelection();
-            var searchResults;
-            context.load(range, 'text');
+            for (var p = 0; p < paragraphs.items.length; p++) {
+                var range = paragraphs.items[p];
+                var searchResults;
+                context.load(range, 'text');
 
-            return context.sync()
-                .then(function () {
-                   
-                    // Queue a search command.
-                    searchResults = range.search(selectedWord, { matchCase: false, matchWholeWord: true });
-                    // Queue a commmand to load the font property of the results.
-                    context.load(searchResults, 'font');
-                })
-                .then(context.sync)
-                .then(function () {
-                    // Queue a command to highlight the search results.
-                    searchResults.items.forEach((item) => {
+                await context.sync()
+                    
+
+                // Queue a search command.
+                searchResults = range.search(selectedWord, { matchCase: false, matchWholeWord: true });
+                // Queue a commmand to load the font property of the results.
+                context.load(searchResults, 'font');
+                    
+                await context.sync();
+                 
+                // Queue a command to highlight the search results.
+                searchResults.items.forEach((item) => {
+                    if (highlight) {
                         item.font.highlightColor = '#FFFF00';
-                        item.font.size = 14;
-                    });                   
-                })
-                .then(context.sync);
+                    }
+                    else
+                        item.font.highlightColor = '#FFFFFF';
+                    //item.font.size = 14;
+                });
+                await context.sync();
+            }
+
+            
         })
         .catch(errorHandler);
     } 
@@ -333,6 +328,7 @@
 
     }
     async function getDistinctWordCount() {
+        console.log("inside getdistinct word count");
         await Word.run(async (context) => {
             let paragraphs = context.document.body.paragraphs;
             paragraphs.load("text");
@@ -372,6 +368,7 @@
 
             // Display counts.
             var ul = $('#ms-List-Overuse');
+            $('#ms-List-Overuse').empty();
             allSearchResults.sort((a,b) => {                
                     return (b.hits.items.length - a.hits.items.length);
             }).forEach((result) => {
@@ -385,7 +382,7 @@
                 //divElement.appendChild(iconElement);
 
                 var spanSecondary = document.createElement('span');
-                spanSecondary.className = 'ms-ListItem-action';
+                spanSecondary.classList.add('ms-ListItem-action',"ms-font-l");
                 spanSecondary.textContent = length;
 
 
@@ -401,7 +398,7 @@
                 divElement2.classList.add("ms-listitem-selectiontarget");//js-toggleSelection
 
                 var spanPrimary = document.createElement('span');
-                spanPrimary.className = 'ms-ListItem-primaryText';
+                spanPrimary.className = 'ms-ListItem-secondaryText';
                 spanPrimary.textContent = result.searchTerm;
 
                
@@ -411,15 +408,37 @@
                 li.appendChild(spanPrimary);
                 //li.appendChild(spanSecondary);
                 
-                li.appendChild(divElement2);
+                //li.appendChild(divElement2);
                 li.appendChild(divElement3);
 
                 ul[0].appendChild(li);
+                $(li).on('click', { key: result.searchTerm },highlightClickedWords);
                 //console.log("Search term: " + result.searchTerm + " => Count: " + length);
             });
+
+            //register for events
+
+            //ul.children('ms-ListItem is-selectable').on('click', highlightClickedWords);
         });
     }
 
+    var wordsHighlighted = [];
+   function highlightClickedWords(event) {
+       console.debug(event.data.key);
+       if (wordsHighlighted.indexOf(event.data.key) == -1) {
+           wordsHighlighted.push(event.data.key);
+           hightlightSelectedWord(event.data.key, true);
+       }
+       else {
+           wordsHighlighted.pop(event.data.key);
+           hightlightSelectedWord(event.data.key, false);
+       }
+
+      
+
+       
+
+    }
     /** Default helper for invoking an action and handling errors. */
     async function tryCatch(callback) {
         try {

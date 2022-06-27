@@ -27,4 +27,8 @@ section.samples {
         margin-left: 20px;
         min-width: 80px;
     }
+.stackeddiv {
+    float: left;
+    margin: 10px;
+}
 
