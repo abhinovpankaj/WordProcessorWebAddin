@@ -118,7 +118,9 @@
     <Content Include="Controls\SearchBox\SearchBox.json" />
     <Content Include="Controls\SearchBox\SearchBox.less" />
     <Content Include="Content\tab.bar.css" />
-    <Content Include="FindReplaceRegex.json" />
+    <Content Include="FindReplaceRegex.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Controls\Dropdown\Dropdown-demos.html" />
     <Content Include="Controls\Dropdown\Dropdown.css" />

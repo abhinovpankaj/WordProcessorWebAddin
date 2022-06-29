@@ -31,4 +31,7 @@ section.samples {
     float: left;
     margin: 10px;
 }
+.ms-ListItem-secondaryText span {
+    word-wrap: break-word;
+}
 

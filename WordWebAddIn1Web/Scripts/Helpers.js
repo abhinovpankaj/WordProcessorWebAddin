@@ -47,26 +47,64 @@
     WordProcessorApp.SearchandReplace = async function (event) {
         await Word.run(async (context) => {
             console.log("Inside Search and replace");
-            console.log("Find:" + WordProcessorApp.CurrentSelectedPattern.find);
-            console.log("Replace:" + WordProcessorApp.CurrentSelectedPattern.replace);
-            var findPattern = WordProcessorApp.CurrentSelectedPattern.find;
-            var replacePattern =  WordProcessorApp.CurrentSelectedPattern.replace;
+           
+            var findPattern = event.data.find;
+            var replacePattern = event.data.replace;
+            var type = event.data.type;
+            var unicode = event.data.unicode;
 
-            let re = new RegExp(findPattern.replace(replacePattern), 'g');
+            var body = context.document.body;
+            var options = Word.SearchOptions.newObject(context);
+            options.matchCase = false;
+            if (type === "simple") {
+                
+                var searchResults = context.document.body.search(findPattern, options);
+                searchResults.load("length");
 
-            let sentences = context.document
-                .getSelection()
-                .getTextRanges(["."] /* Using the "." as delimiter */, false /*means without trimming spaces*/);
-            sentences.load("text");
+                await context.sync();
+                //context.load(searchResults, "text");
 
-            await context.sync();
+                for (var i = 0; i < searchResults.items.length; i++) {
 
-            for (let i = 0; i < sentences.items.length; i++) {
-                let found = sentences.items[i].text.match(findPattern);
-                if (found) {
-                    sentences.items[i].text.replace(re, c => '_'.repeat(c.length));
+                    searchResults.items[i].load('text');
+                    await context.sync();
+                    var str = searchResults.items[i].text;
+                    console.log(str);
+                    str = str.replace(findPattern, replacePattern);
+                    console.log(str);
+                    searchResults.items[i].insertText(str, "Replace");
                 }
             }
+            else {
+                options.matchWildcards = true;
+                var searchResults = context.document.body.search(findPattern, options);
+                searchResults.load("length");
+
+                await context.sync();
+                var regex;
+                for (var i = 0; i < searchResults.items.length; i++) {
+                    searchResults.items[i].load('text');
+                    await context.sync();
+                    var str = searchResults.items[i].text;
+
+                    // / {2,}/;
+                    console.log("previous: " + str);
+                    if (unicode === "") {
+                        regex = new RegExp(findPattern);
+                        str = str.replace(regex, replacePattern);
+                    }
+                    else {
+                        regex = new RegExp(replacePattern);
+                        str = str.replace(regex, "$1" + unicode);
+                    }
+                        
+                    console.log("repalced: "+str);
+                    searchResults.items[i].insertText(str, "Replace");
+                }
+            }
+            
+
+            await context.sync();
         });
         
     }
@@ -97,7 +135,7 @@
             data.Patterns.forEach(function (pattern) {
 
                 var iconElement = document.createElement('i');
-                iconElement.classList.add("ms-font-xxl", "ms-fontWeight-light", "ms-fontColor-themePrimary",
+                iconElement.classList.add("ms-font-l", "ms-fontWeight-light", "ms-fontColor-themePrimary",
                     "ms-Icon", "ms-Icon--Play");
                 var divElement = document.createElement('div');
                 divElement.className = 'ms-ListItem-action';
@@ -111,30 +149,41 @@
                 var divElement2 = document.createElement('div');
                 divElement2.classList.add("ms-ListItem-selectionTarget", "js-toggleSelection");
 
+                //hook checkbox click
+
                 var spanPrimary = document.createElement('span');
-                spanPrimary.className = 'ms-ListItem-primaryText';
+                spanPrimary.className = 'ms-ListItem-secondaryText';
                 spanPrimary.textContent = pattern.Description;
 
-                var spanSecondary = document.createElement('span');
-                spanSecondary.className = 'ms-ListItem-secondaryText';
-                spanSecondary.textContent = pattern.Find;
+                //var spanSecondary = document.createElement('span');
+                //spanSecondary.className = 'ms-ListItem-secondaryText';
+                //spanSecondary.textContent = pattern.Find;
 
-                var spanTertiary = document.createElement('span');
-                spanTertiary.className = 'ms-ListItem-tertiaryText';
-                spanTertiary.textContent = pattern.Replace;
+                //var spanTertiary = document.createElement('span');
+                //spanTertiary.className = 'ms-ListItem-tertiaryText';
+                //spanTertiary.textContent = pattern.Replace;
 
                 var li = document.createElement('li');
                 li.classList.add("ms-ListItem", "is-selectable");
 
                 li.appendChild(spanPrimary);
-                li.appendChild(spanSecondary);
-                li.appendChild(spanTertiary);
+                //li.appendChild(spanSecondary);
+                //li.appendChild(spanTertiary);
                 li.appendChild(divElement2);
                 li.appendChild(divElement3);
-                divElement2.onClick= function (event) {
-                    $(this).parents('.ms-ListItem').toggleClass('is-selected');
-                };
+               
+                //$(divElement2).on('click', function (event) {
+                //    $(this).parent('.ms-ListItem').toggleClass('is-selected');
+                //});
                 ul[0].appendChild(li);
+                $(iconElement).on ('click',
+                    {
+                        find: pattern.Find,
+                        replace: pattern.Replace,
+                        type: pattern.type,
+                        unicode:pattern.unicode
+                       
+                    }, WordProcessorApp.SearchandReplace);
 
             });
         });
