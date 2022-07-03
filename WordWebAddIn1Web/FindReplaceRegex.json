@@ -2,84 +2,79 @@
   [
     {
       "Description": "double spaces",
-      "Find": " {2,}",
+      "Find": [ " {2,}" ],
       "Replace": " ",
       "unicode": "",
       "type": "regex"
     },
     {
       "Description": "add non breaking spaces after: Art./ §/ Abs./ S. / Hs./ Nr./ Ziff./ lit. (if a space was missing)",
-      "Find": "(§)([0-9]) + …",
-      "Replace": "§^s\\2",
-      "unicode": "\u00A0",
+      "Find": [ "(Art.) (?)", "(§) (?)", "(Abs.) (?)", "(S. ) (?)", "(Hs.) (?)", "(Nr.) (?)", "(Ziff.) (?)", "(lit.) (?)" ],
+      "Replace": "",
+      "unicode": "nonbreaking",
       "type": "regex"
     },
     {
       "Description": "add non breaking spaces before: % / € / $",
-      "Find": "([0-9]) [%$€]",
-      "Replace": "\\1^s(%)+ …",
-      "unicode": "\u00A0",
+      "Find": [ "([0-9]) ([%$€])" ],
+      "Replace": "",
+      "unicode": "nonbreaking",
       "type": "regex"
     },
+
+
     {
       "Description": "non breaking spaces for \"Anlagen\"",
-      "Find": "(Anlage B )([0-9])",
+      "Find": [ "(Anlage B )([0-9])" ],
       "Replace": "Anlage^sB^s\\2",
       "unicode": "\u00A0",
       "type": "regex"
     },
     {
       "Description": "Add full stop after Art",
-      "Find": "(Art )",
+      "Find": [ "(Art )" ],
       "Replace": "(Art)",
       "unicode": "\u002E",
       "type": "regex"
     },
     {
       "Description": "add protected spaces before f. / ff.",
-      "Find": "([0-9])(f*)(.) + ([0-9]) (f*)(.)",
+      "Find": [ "([0-9])(f*)(.) + ([0-9]) (f*)(.)" ],
       "Replace": "\\1^s\\2\\3",
       "unicode": "",
       "type": "regex"
     },
     {
       "Description": "move fullstop behind footnote",
-      "Find": "(^2)(.)",
+      "Find": [ "(^2)(.)" ],
       "Replace": "\\2\\1",
       "unicode": "\u002E",
       "type": "regex"
     },
     {
       "Description": "correct hyphens",
-      "Find": "([0-9])( ^= )([0-9])",
-      "Replace": "\\1^=\\3",
-      "unicode": "",
-      "type": "simple"
-    },
-    {
-      "Description": "correct hyphens",
-      "Find": "([0-9])(-)([0-9])",
+      "Find": [ "([0-9])(-)([0-9])" ],
       "Replace": "\\1^=\\3",
       "unicode": "",
       "type": "simple"
     },
     {
       "Description": "Comma after court",
-      "Find": "(BGH )(Urt.)",
+      "Find": [ "(BGH )","(Urt.)" ],
       "Replace": "BGH, \\2",
       "unicode": "",
       "type": "regex"
     },
     {
-      "Description": "Replace abbreviations",
-      "Find": "ggf.",
+      "Description": "Replace ggf.",
+      "Find": [ "ggf." ],
       "Replace": "gegebenenfalls",
       "unicode": "",
       "type": "simple"
     },
     {
-      "Description": "Replace abbreviations",
-      "Find": "i.V.m.",
+      "Description": "Replace i.V.m.",
+      "Find": [ "i.V.m." ],
       "Replace": "in Verbindung mit",
       "unicode": "",
       "type": "simple"

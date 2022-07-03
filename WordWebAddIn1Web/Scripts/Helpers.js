@@ -57,50 +57,63 @@
             var options = Word.SearchOptions.newObject(context);
             options.matchCase = false;
             if (type === "simple") {
-                
-                var searchResults = context.document.body.search(findPattern, options);
-                searchResults.load("length");
 
-                await context.sync();
-                //context.load(searchResults, "text");
+                for (var k = 0; k < findPattern.length; k++) {
+                    var searchResults = context.document.body.search(findPattern[k], options);
+                    searchResults.load("length");
 
-                for (var i = 0; i < searchResults.items.length; i++) {
-
-                    searchResults.items[i].load('text');
                     await context.sync();
-                    var str = searchResults.items[i].text;
-                    console.log(str);
-                    str = str.replace(findPattern, replacePattern);
-                    console.log(str);
-                    searchResults.items[i].insertText(str, "Replace");
+                    //context.load(searchResults, "text");
+
+                    for (var i = 0; i < searchResults.items.length; i++) {
+
+                        searchResults.items[i].load('text');
+                        await context.sync();
+                        var str = searchResults.items[i].text;
+                        console.log(str);
+                        str = str.replace(findPattern[k], replacePattern);
+                        console.log(str);
+                        searchResults.items[i].insertText(str, "Replace");
+                    }
                 }
+                
             }
             else {
                 options.matchWildcards = true;
-                var searchResults = context.document.body.search(findPattern, options);
-                searchResults.load("length");
+                for (var k = 0; k < findPattern.length; k++) {
+                    var searchResults = context.document.body.search(findPattern[k], options);
+                    searchResults.load("length");
 
-                await context.sync();
-                var regex;
-                for (var i = 0; i < searchResults.items.length; i++) {
-                    searchResults.items[i].load('text');
                     await context.sync();
-                    var str = searchResults.items[i].text;
+                    var regex;
+                    for (var i = 0; i < searchResults.items.length; i++) {
+                        searchResults.items[i].load('text');
+                        await context.sync();
+                        var str = searchResults.items[i].text;
 
-                    // / {2,}/;
-                    console.log("previous: " + str);
-                    if (unicode === "") {
-                        regex = new RegExp(findPattern);
-                        str = str.replace(regex, replacePattern);
+                        // / {2,}/;
+                        console.log("previous: " + str);
+                        if (unicode === "") {
+                            regex = new RegExp(findPattern[k]);
+                            str = str.replace(regex, replacePattern);
+                        }
+                        else if (unicode === "nonbreaking") {
+                            if (findPattern[k].indexOf('?')) {
+                                var newPattern = findPattern[k].replace('?','');
+                                regex = new RegExp(newPattern);
+                            }
+                            else
+                                regex = new RegExp(findPattern[k]);
+
+                            str = str.replace(regex, "$1\u00A0$2");
+                        }
+
+                        console.log("repalced: " + str);
+                        searchResults.items[i].insertText(str, "Replace");
+                        searchResults.items[i].font.highlightColor = "yellow";
                     }
-                    else {
-                        regex = new RegExp(replacePattern);
-                        str = str.replace(regex, "$1" + unicode);
-                    }
-                        
-                    console.log("repalced: "+str);
-                    searchResults.items[i].insertText(str, "Replace");
                 }
+                
             }
             
 
@@ -135,7 +148,7 @@
             data.Patterns.forEach(function (pattern) {
 
                 var iconElement = document.createElement('i');
-                iconElement.classList.add("ms-font-l", "ms-fontWeight-light", "ms-fontColor-themePrimary",
+                iconElement.classList.add("ms-font-l", "ms-fontWeight-light",
                     "ms-Icon", "ms-Icon--Play");
                 var divElement = document.createElement('div');
                 divElement.className = 'ms-ListItem-action';
@@ -147,7 +160,7 @@
                 divElement3.appendChild(divElement);
 
                 var divElement2 = document.createElement('div');
-                divElement2.classList.add("ms-ListItem-selectionTarget", "js-toggleSelection");
+                divElement2.classList.add("ms-ListItem-selectionTarget");
 
                 //hook checkbox click
 
@@ -157,18 +170,18 @@
 
                 //var spanSecondary = document.createElement('span');
                 //spanSecondary.className = 'ms-ListItem-secondaryText';
-                //spanSecondary.textContent = pattern.Find;
+                //spanSecondary.textContent = "A";
 
-                //var spanTertiary = document.createElement('span');
-                //spanTertiary.className = 'ms-ListItem-tertiaryText';
-                //spanTertiary.textContent = pattern.Replace;
+                var spanTertiary = document.createElement('span');
+                spanTertiary.className = 'ms-ListItem-tertiaryText';
+                spanTertiary.textContent = "\n";
 
                 var li = document.createElement('li');
-                li.classList.add("ms-ListItem", "is-selectable");
+                li.classList.add("ms-ListItem");
 
                 li.appendChild(spanPrimary);
                 //li.appendChild(spanSecondary);
-                //li.appendChild(spanTertiary);
+                li.appendChild(spanTertiary);
                 li.appendChild(divElement2);
                 li.appendChild(divElement3);
                
