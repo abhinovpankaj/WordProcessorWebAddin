@@ -1,0 +1,28 @@
+Removing double spaces: The script should remove all double spaces from the document, meaning that whenever there are two or more spaces in a
+row, they will be replaced by a single space
+
+Correct usage of non-breaking spaces:
+• Whenever there is one of the strings “Art.”, “§”, “Abs.”, “S.”, “Hs.”, “Nr.”, “Ziff.”, “lit.” or “Buchst.” followed by 
+a space and a digit, the space must be replaced by a non-breaking space (Unicode: U+00A0; html: &nsbp;). If there is no space
+between the string and the digit, a non-breaking space must be inserted.
+
+• Furthermore, if there is there is a digit followed by a space and „%”, “€” or “$” the space should also be replaced by a 
+non-breaking space. If there is no space between the digit and the sign, a non-breaking space should be inserted.
+
+• If there a string “Anlage” followed by a space, followed by capital “B” or by capital “K”, followed by another space, followed by 
+a number, the spaces must be replaced with non-breaking spaces.
+
+• When a digit is followed by a space and either “f.” or “ff.” the space must be replaced by a non-breaking space
+
+Adding forgotten full stops: If the string “Art” is followed by a space or by a non-breqaking space, and either is then followed by a digit
+
+Correct placement of footnotes: If there a footnote (small number in superscript; inserted by: References / Insert footnote) is placed before a 
+full stop, it must be moved behind the full stop.
+
+Correct usage of hyphens:
+• If there is a digit, followed by a space, followed by a dash (Unicode: U+2013; html: &ndash;) followed by a space, followed by a digit, 
+both spaces must be deleted.
+• If there is a digit, followed by a hyphen (Unicode: U+2010; html: &#x2010;), followed by a digit, the hyphen must be replaced by a 
+dash (Unicode: U+2013; html: &ndash;)
+
+Citing court decisions correctly: If the string “BGH” is followed by a space and either the string “Urt.” or “Urteil”, a comma must be added before the space.

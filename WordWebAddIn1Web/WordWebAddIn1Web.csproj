@@ -161,6 +161,7 @@
     <Content Include="Images\Button80x80.png" />
     <Content Include="Images\Close.png" />
     <Content Include="Images\P5N_logo.png" />
+    <Content Include="req.txt" />
     <Content Include="Scripts\dropdown.js" />
     <Content Include="Scripts\Helpers.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

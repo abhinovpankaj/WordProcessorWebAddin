@@ -91,20 +91,48 @@
                         await context.sync();
                         var str = searchResults.items[i].text;
 
-                        // / {2,}/;
                         console.log("previous: " + str);
+
                         if (unicode === "") {
                             regex = new RegExp(findPattern[k]);
                             str = str.replace(regex, replacePattern);
                         }
                         else if (unicode === "nonbreaking") {
-                            if (findPattern[k].indexOf('?')) {
-                                var newPattern = findPattern[k].replace('?','');
-                                regex = new RegExp(newPattern);
-                            }
-                            else
+                            if (replacePattern === "multi") {
                                 regex = new RegExp(findPattern[k]);
+                                str = str.replace(regex, "$1\u00A0$2\u00A0$3");
+                            }
+                            else {
+                                if (findPattern[k].indexOf(replacePattern)) {
+                                    var newPattern = findPattern[k].replace(replacePattern, '');
+                                    regex = new RegExp(newPattern);
+                                    str = str.replace(regex, "$1\u00A0$2");
+                                }
 
+                                else {
+                                    regex = new RegExp(findPattern[k]);
+                                    str = str.replace(regex, "$1\u00A0$2");
+                                }
+                            }
+                        }
+                        else if (unicode === "fullstop") {
+                            regex = new RegExp(replacePattern);
+                            str = str.replace(regex, "$1\u002E$2");
+                        }
+                        else if (unicode === "removespaces") {
+                            regex = new RegExp(replacePattern);
+                            str = str.replace(regex, "$1$3$5");
+                        }
+                        else if (unicode === "addcomma") {
+                            regex = new RegExp(replacePattern);
+                            str = str.replace(regex, "$1\u002C$2");
+                        }
+                        else if (unicode === "footnote") {
+                            regex = new RegExp(replacePattern);
+                            str = str.replace(regex, "$2$1");
+                        }
+                        else {
+                            regex = new RegExp(replacePattern);
                             str = str.replace(regex, "$1\u00A0$2");
                         }
 

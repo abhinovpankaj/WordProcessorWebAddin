@@ -9,60 +9,58 @@
     },
     {
       "Description": "add non breaking spaces after: Art./ §/ Abs./ S. / Hs./ Nr./ Ziff./ lit. (if a space was missing)",
-      "Find": [ "(Art.) (?)", "(§) (?)", "(Abs.) (?)", "(S. ) (?)", "(Hs.) (?)", "(Nr.) (?)", "(Ziff.) (?)", "(lit.) (?)" ],
-      "Replace": "",
+      "Find": [ "(Art.)([ {0,1}])([0-9])", "(§)([ {0,1}])([0-9])", "(Abs.)([ {0,1}])([0-9])", "(S. )([ {0,1}])([0-9])", "(Hs.)([ {0,1}])([0-9])", "(Nr.)([ {0,1}])([0-9])", "(Ziff.)([ {0,1}])([0-9])", "(lit.)([ {0,1}])([0-9])", "(Buchst.)([ {0,1}])([0-9])" ],
+      "Replace": "([0-9])",
       "unicode": "nonbreaking",
       "type": "regex"
     },
     {
       "Description": "add non breaking spaces before: % / € / $",
-      "Find": [ "([0-9]) ([%$€])" ],
-      "Replace": "",
+      "Find": [ "([0-9])([ {0,1}])([%$€])" ],
+      "Replace": "([%$€])",
       "unicode": "nonbreaking",
       "type": "regex"
     },
-
-
     {
       "Description": "non breaking spaces for \"Anlagen\"",
-      "Find": [ "(Anlage B )([0-9])" ],
-      "Replace": "Anlage^sB^s\\2",
-      "unicode": "\u00A0",
+      "Find": [ "(Anlage) ([BK]) ([0-9])" ],
+      "Replace": "multi",
+      "unicode": "nonbreaking",
       "type": "regex"
     },
     {
       "Description": "Add full stop after Art",
-      "Find": [ "(Art )" ],
-      "Replace": "(Art)",
-      "unicode": "\u002E",
+      "Find": [ "(Art )([0-9])" ],
+      "Replace": "(Art)( [0-9])",
+      "unicode": "fullstop",
       "type": "regex"
     },
     {
       "Description": "add protected spaces before f. / ff.",
-      "Find": [ "([0-9])(f*)(.) + ([0-9]) (f*)(.)" ],
-      "Replace": "\\1^s\\2\\3",
-      "unicode": "",
+      "Find": [ "(f.)([ {0,1}])([0-9])", "(ff.)([ {0,1}])([0-9])" ],
+      "Replace": "([0-9])",
+      "unicode": "nonbreaking",
       "type": "regex"
     },
     {
       "Description": "move fullstop behind footnote",
       "Find": [ "(^2)(.)" ],
       "Replace": "\\2\\1",
-      "unicode": "\u002E",
+      "unicode": "footnote",
       "type": "regex"
     },
     {
       "Description": "correct hyphens",
-      "Find": [ "([0-9])(-)([0-9])" ],
-      "Replace": "\\1^=\\3",
-      "unicode": "",
-      "type": "simple"
+      "Find": [ "([0-9])( {1,})([\u002010])( {1,})([0-9])", "([0-9])( {1,})([\u002013])( {1,})([0-9])" ],
+      "Replace": "([0-9])( {1,})([\u002013])( {1,})([0-9])",
+      "unicode": "removespaces",
+      "type": "regex"
     },
     {
       "Description": "Comma after court",
-      "Find": [ "(BGH )","(Urt.)" ],
-      "Replace": "BGH, \\2",
-      "unicode": "",
+      "Find": [ "(BGH)( {1,})(Urt.)", "(BGH)( {1,})(Urteil)" ],
+      "Replace": "(BGH)( {1,})",
+      "unicode": "addcomma",
       "type": "regex"
     },
     {
