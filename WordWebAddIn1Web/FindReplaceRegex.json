@@ -22,7 +22,7 @@
       "type": "regex"
     },  
     {
-      "Description": "non breaking spaces for \"Anlagen\"",
+      "Description": "non breaking spaces for \"Anlage\"",
       "Find": [ "(Anlage) ([BK]) ([0-9])" ],
       "Replace": "multi",
       "unicode": "nonbreaking",
