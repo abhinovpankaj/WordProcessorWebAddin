@@ -9,18 +9,18 @@
     },
     {
       "Description": "add non breaking spaces after: Art./ §/ Abs./ S. / Hs./ Nr./ Ziff./ lit. (if a space was missing)",
-      "Find": [ "(Art.)([ {0,1}])([0-9])", "(§)([ {0,1}])([0-9])", "(Abs.)([ {0,1}])([0-9])", "(S. )([ {0,1}])([0-9])", "(Hs.)([ {0,1}])([0-9])", "(Nr.)([ {0,1}])([0-9])", "(Ziff.)([ {0,1}])([0-9])", "(lit.)([ {0,1}])([0-9])", "(Buchst.)([ {0,1}])([0-9])" ],
-      "Replace": "([0-9])",
+      "Find": [ "(Art.)([ {0,1}])([0-9])", "(Art.)([0-9])", "(§)([ {0,1}])([0-9])", "(Abs.)([ {0,1}])([0-9])", "(S. )([ {0,1}])([0-9])", "(Hs.)([ {0,1}])([0-9])", "(Nr.)([ {0,1}])([0-9])", "(Ziff.)([ {0,1}])([0-9])", "(lit.)([ {0,1}])([0-9])", "(Buchst.)([ {0,1}])([0-9])", "(§)([0-9])", "(Abs.)([0-9])", "(S. )([0-9])", "(Hs.)([0-9])", "(Nr.)([0-9])", "(Ziff.)([0-9])", "(lit.)([0-9])", "(Buchst.)([0-9])" ],
+      "Replace": "([ {0,1}])",
       "unicode": "nonbreaking",
       "type": "regex"
     },
     {
       "Description": "add non breaking spaces before: % / € / $",
-      "Find": [ "([0-9])([ {0,1}])([%$€])" ],
-      "Replace": "([%$€])",
-      "unicode": "nonbreaking",
+      "Find": [ "([0-9])([%$€])", "([0-9])([ {0,1}])([%$€])" ],
+      "Replace": "([ {0,1}])",
+      "unicode": "nonbreaking%",
       "type": "regex"
-    },
+    },  
     {
       "Description": "non breaking spaces for \"Anlagen\"",
       "Find": [ "(Anlage) ([BK]) ([0-9])" ],

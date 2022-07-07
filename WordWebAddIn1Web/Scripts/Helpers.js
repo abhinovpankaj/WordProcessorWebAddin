@@ -103,10 +103,11 @@
                                 str = str.replace(regex, "$1\u00A0$2\u00A0$3");
                             }
                             else {
-                                if (findPattern[k].indexOf(replacePattern)) {
-                                    var newPattern = findPattern[k].replace(replacePattern, '');
+                                if (findPattern[k].indexOf(replacePattern)>0) {
+                                    var newPattern = findPattern[k].replace("([ {0,1}])([0-9])", replacePattern);
                                     regex = new RegExp(newPattern);
-                                    str = str.replace(regex, "$1\u00A0$2");
+                                    str = str.replace(regex, "$1\u00A0")
+                                    
                                 }
 
                                 else {
@@ -115,6 +116,20 @@
                                 }
                             }
                         }
+                        else if (unicode === "nonbreaking%") {
+                            if (findPattern[k].indexOf(replacePattern) > 0) {
+                                var newPattern = findPattern[k].replace("([ {0,1}])([%$€])", replacePattern);
+                                regex = new RegExp(newPattern);
+                                str = str.replace(regex, "$1\u00A0")
+
+                            }
+
+                            else {
+                                regex = new RegExp(findPattern[k]);
+                                str = str.replace(regex, "$1\u00A0$2");
+                            }
+                        }
+
                         else if (unicode === "fullstop") {
                             regex = new RegExp(replacePattern);
                             str = str.replace(regex, "$1\u002E$2");
